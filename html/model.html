@@ -1,0 +1,33 @@
+<p>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+<h3>Linear predictor</h3>
+The time-to-recurrence and melanoma specific mortality was estimated using a cox proportional hazards model.
+ The linear predictor of the model is given by:
+ $$ \begin{align*}
+    LP &=2.031 \\
+      &+1.026 \cdot \text{SNstatus} \\
+      &+0.351 \cdot \log(\text{Age at SN})\\
+      &+0.491 \cdot \text{Ulceration}\\
+      &+0.262 \cdot \text{location_leg}+0.380 \cdot \text{location_trunk}+0.706 \cdot \text{location_hn}\\
+      &+0.821 \cdot (\log(\text{Breslow thickness}) - 0.715)\\
+      &+0.187 \cdot \log(\text{tumor burden}) \\
+      &-0.384 \cdot (\log(\text{Breslow thickness}) - 0.715) \cdot \text{SNstatus}
+      \end{align*} $$
+where log is the natural logarithm, SNstatus is 1 if positive SN status and 0 if negative SN status; ulceration is 1 if there is ulceration; location_leg is 1 if the location is leg; location_trunk is 1 if the location is trunk, location_hn is 1 if location is head and neck.
+
+<h3>Recurrence</h3>
+The probability of recurrence was calculated by
+$$ \begin{align*}
+    \text{hazard} &= 0.253 \cdot \exp(LP) \\
+    P(\text{recurrence}) &= (1-\exp(-\text{hazard})) \cdot 100
+    \end{align*} $$
+where exp the natural exponential.
+
+<h3>Melanoma-specific mortality</h3>
+The probability of melanoma-specific mortality (MSM) was calculated by
+$$ \begin{align*}
+    \text{hazard} &= 0.144 \cdot \exp(1.10 \cdot LP) \\
+    P(\text{MSM}) &= (1-\exp(-\text{hazard})) \cdot 100
+    \end{align*} $$
+where exp the natural exponential.
+</p>

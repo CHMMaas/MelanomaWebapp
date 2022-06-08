@@ -1,0 +1,13 @@
+name: MelanomaApp
+title: MelanomaApp
+username:
+account: erasmusmcpublichealth
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6230069
+bundleId: 5868776
+url: https://erasmusmcpublichealth.shinyapps.io/MelanomaApp/
+when: 1651663021.45096
+lastSyncTime: 1651663021.45096
+asMultiple: FALSE
+asStatic: FALSE
