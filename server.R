@@ -3,13 +3,13 @@ shiny::shinyServer(
     observe ({
       if (input$SNstatus=="Negative"){
         updateSliderInput(session=session, inputId="tumburden", value=1)
-        disable("tumburden")
+        shinyjs::disable("tumburden")
       } else if (input$SNstatus=="Positive"){
         enable("tumburden")
       }
     })
 
-    output$recurrence_box <- renderInfoBox({
+    output$recurrence_box <- shinydashboard::renderInfoBox({
       # calculate LP score
       num.input <- string.to.num(input)
       lp <- coef.Rec["SNstatus=Positive"]*num.input$SNstatus+
@@ -32,7 +32,7 @@ shiny::shinyServer(
       )
     })
 
-    output$MSM_box <- renderInfoBox({
+    output$MSM_box <- shinydashboard::renderInfoBox({
       # # calculate LP score
       num.input <- string.to.num(input)
       lp <- coef.Rec["SNstatus=Positive"]*num.input$SNstatus+

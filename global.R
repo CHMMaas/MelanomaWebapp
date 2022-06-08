@@ -2,10 +2,6 @@
 ##### global.R
 ##### Author: C.C.H.M. Maas
 #####
-library(shiny)           # shiny app
-library(shinyjs)         # update after clicking calculate
-library(shinydashboard)  # set up dashboards
-library(dashboardthemes) # set theme
 
 # set parameters for analysis
 c.Breslow <- 0.7154091
