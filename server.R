@@ -5,7 +5,7 @@ shiny::shinyServer(
         updateSliderInput(session=session, inputId="tumburden", value=1)
         shinyjs::disable("tumburden")
       } else if (input$SNstatus=="Positive"){
-        enable("tumburden")
+        shinyjs::enable("tumburden")
       }
     })
 
@@ -13,7 +13,7 @@ shiny::shinyServer(
       # calculate LP score
       num.input <- string.to.num(input)
       lp <- coef.Rec["SNstatus=Positive"]*num.input$SNstatus+
-        coef.Rec["Age.SN"]*log(input$age)+
+        coef.Rec["Age.SN"]*input$age+
         coef.Rec["Ulceration=Yes"]*num.input$ulceration+
         coef.Rec["Loc_CAT=leg"]*num.input$location.leg+
         coef.Rec["Loc_CAT=trunk"]*num.input$location.trunk+
@@ -27,7 +27,7 @@ shiny::shinyServer(
       p.Rec <- 1-exp(-h.Rec)
 
       # display probability
-      infoBox("Recurrence is",
+      shinydashboard::infoBox("Recurrence is",
               paste0(sprintf("%.0f", p.Rec*100), "%"), icon = icon("chart-line"), color = "blue"
       )
     })
@@ -36,7 +36,7 @@ shiny::shinyServer(
       # # calculate LP score
       num.input <- string.to.num(input)
       lp <- coef.Rec["SNstatus=Positive"]*num.input$SNstatus+
-        coef.Rec["Age.SN"]*log(input$age)+
+        coef.Rec["Age.SN"]*input$age+
         coef.Rec["Ulceration=Yes"]*num.input$ulceration+
         coef.Rec["Loc_CAT=leg"]*num.input$location.leg+
         coef.Rec["Loc_CAT=trunk"]*num.input$location.trunk+
@@ -50,7 +50,7 @@ shiny::shinyServer(
       p.MSM <- 1-exp(-h.MSM)
 
       # display probability
-      infoBox("Melanoma-specific mortality is",
+      shinydashboard::infoBox("Melanoma-specific mortality is",
               paste0(sprintf("%.0f", p.MSM*100), "%"), icon = icon("heart"), color = "blue"
       )
     })

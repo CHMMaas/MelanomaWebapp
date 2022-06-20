@@ -4,16 +4,17 @@
 #####
 
 # set parameters for analysis
-c.Breslow <- 0.7154091
-center.Rec <- 2.031039
-coef.Rec <- c(1.0264235, 0.3514440, 0.4914014, 0.2621760, 0.3803103,
-              0.7062802, 0.8212041, 0.1866868, -0.3838754)
+c.Breslow <- 0.71540906
+center.Rec <- 1.0856889
+coef.Rec <- c(1.0764262107, 0.0082653245, 0.4680218484,
+              0.2590865107, 0.3789697619, 0.6807525719,
+              0.8827736434, 0.1988932596, -0.4522583367)
 names(coef.Rec) <- c("SNstatus=Positive", "Age.SN", "Ulceration=Yes",
                      "Loc_CAT=leg", "Loc_CAT=trunk", "Loc_CAT=headneck",
                      "Breslow", "Rdamcrit", "SNstatus=Positive * Breslow")
-h0.Rec <- 0.2534864
-h0.MSM <- 0.1438848
-MSM.cal.fact <- 1.0973015
+h0.Rec <- 0.20564083
+h0.MSM <- 0.089069579
+MSM.cal.fact <- 1.1408102
 
 # helper function converting input strings to numeric values
 string.to.num <- function(input){

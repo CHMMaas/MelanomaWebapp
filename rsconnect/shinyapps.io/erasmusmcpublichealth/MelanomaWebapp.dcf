@@ -5,9 +5,9 @@ account: erasmusmcpublichealth
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6230116
-bundleId: 5988294
+bundleId: 6023417
 url: https://erasmusmcpublichealth.shinyapps.io/MelanomaWebapp/
-when: 1654674081.85587
-lastSyncTime: 1654674081.85587
+when: 1655712689.15507
+lastSyncTime: 1655712689.15507
 asMultiple: FALSE
 asStatic: FALSE
