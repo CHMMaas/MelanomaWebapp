@@ -1,5 +1,10 @@
 shiny::shinyServer(
   function(input, output, session){
+    observeEvent(input$link_to_disclaimer, {
+      newvalue <- "disclaimer"
+      updateTabItems(session, "dashboard", newvalue)
+    })
+    
     observe ({
       if (input$SNstatus=="Negative"){
         updateSliderInput(session=session, inputId="tumburden", value=1)

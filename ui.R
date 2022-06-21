@@ -1,11 +1,12 @@
 shiny::shinyUI(
   shinydashboard::dashboardPage(
-    shinydashboard::dashboardHeader(title = "Calculator"),
+    shinydashboard::dashboardHeader(title = "Melanoma Webapp"),
     shinydashboard::dashboardSidebar(
       shinydashboard::sidebarMenu(
         shinydashboard::menuItem("Dashboard", tabName = "dashboard", icon = icon("calculator")),
         shinydashboard::menuItem("About", tabName = "abstract", icon = icon("info-circle")),
         shinydashboard::menuItem("Model", tabName = "model", icon = icon("toolbox")),
+        shinydashboard::menuItem("Disclaimer", tabName = "disclaimer", icon = icon("exclamation")),
         shinydashboard::menuItem("Supplier", tabName = "supplier", icon = icon("tools"))
       )
     ),
@@ -20,7 +21,7 @@ shiny::shinyUI(
                       solidHeader = FALSE, status = "primary",
                       shiny::selectInput("SNstatus", "Positive or negative sentinel node status",
                                   choices = c("Negative", "Positive")),
-                      shiny::sliderInput("age", "Enter the age at which the patient was diagnosed",
+                      shiny::sliderInput("age", "Enter the age at which the patient underwent the sentinel node procedure",
                                   20, 80, 55),
                       shiny::selectInput("ulceration", "Ulceration",
                                   choices = c("No", "Yes")),
@@ -46,7 +47,7 @@ shiny::shinyUI(
                          shinydashboard::box(width = 12,
                                            title = "Disclaimer",
                                            solidHeader = FALSE, status = "warning",
-                                           includeHTML("html/disclaimer.html")))
+                                           includeHTML("html/small_disclaimer.html")))
                     )
                   )
                 )
@@ -57,6 +58,9 @@ shiny::shinyUI(
         shinydashboard::tabItem(tabName = "model",
                 h2("Model"),
                 includeHTML("html/model.html")),
+        shinydashboard::tabItem(tabName = "disclaimer",
+                                h2("Disclaimer"),
+                                includeHTML("html/disclaimer.html")),
         shinydashboard::tabItem(tabName = "supplier",
                 includeHTML("html/supplier.html"))
       )
