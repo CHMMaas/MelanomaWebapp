@@ -4,17 +4,19 @@
 #####
 
 # set parameters for analysis
-c.Breslow <- 0.71540906
-center.Rec <- 1.0856889
-coef.Rec <- c(1.0764262107, 0.0082653245, 0.4680218484,
-              0.2590865107, 0.3789697619, 0.6807525719,
+# load("Z:/Project Melanoom/PaperMelanoma/Results/h0.Rec.MSM.Rdata")
+options(digits=8)
+c.Breslow <- 0.71721686
+center.Rec <- 1.084093
+coef.Rec <- c(1.0756086189, 0.0082653245, 0.4680218484,
+              0.2590865107, 0.3789697619, 0.6807525719, 
               0.8827736434, 0.1988932596, -0.4522583367)
 names(coef.Rec) <- c("SNstatus=Positive", "Age.SN", "Ulceration=Yes",
                      "Loc_CAT=leg", "Loc_CAT=trunk", "Loc_CAT=headneck",
                      "Breslow", "Rdamcrit", "SNstatus=Positive * Breslow")
-h0.Rec <- 0.20564083
-h0.MSM <- 0.089069579
-MSM.cal.fact <- 1.1408102
+h0.Rec <- 0.20469555
+h0.MSM <- 0.089604541
+MSM.cal.fact <- 1.1279159
 
 # helper function converting input strings to numeric values
 string.to.num <- function(input){
