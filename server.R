@@ -24,11 +24,12 @@ shiny::shinyServer(
 
       # calculate corresponding probability
       h.Rec <- h0.Rec*exp(lp)
-      p.Rec <- 1-exp(-h.Rec)
+      # p.Rec <- 1-exp(-h.Rec)
+      p.RFS <- exp(-h.Rec)
 
       # display probability
-      shinydashboard::infoBox("Recurrence is",
-              paste0(sprintf("%.0f", p.Rec*100), "%"), icon = icon("chart-line"), color = "blue"
+      shinydashboard::infoBox("Recurrence-free survival is",
+              paste0(sprintf("%.0f", p.RFS*100), "%"), icon = icon("chart-line"), color = "blue"
       )
     })
 
@@ -47,11 +48,12 @@ shiny::shinyServer(
 
       # calculate corresponding probability
       h.MSM <- h0.MSM*exp(MSM.cal.fact*lp)
-      p.MSM <- 1-exp(-h.MSM)
+      # p.MSM <- 1-exp(-h.MSM)
+      p.MSS <- exp(-h.MSM)
 
       # display probability
-      shinydashboard::infoBox("Melanoma-specific mortality is",
-              paste0(sprintf("%.0f", p.MSM*100), "%"), icon = icon("heart"), color = "blue"
+      shinydashboard::infoBox("Melanoma-specific survival is",
+              paste0(sprintf("%.0f", p.MSS*100), "%"), icon = icon("heart"), color = "blue"
       )
     })
 

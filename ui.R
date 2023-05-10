@@ -39,7 +39,7 @@ shiny::shinyUI(
                       id="results.panel",
                       shiny::conditionalPanel(condition="calculateButton",
                         shinydashboard::box(width = 6,
-                                           title = "Probability of",
+                                           title = "Results",
                                            solidHeader = FALSE, status = "info",
                                            shinydashboard::infoBoxOutput("recurrence_box", width = 12),
                                            shinydashboard::infoBoxOutput("MSM_box", width = 12))),
