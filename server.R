@@ -8,53 +8,101 @@ shiny::shinyServer(
         shinyjs::enable("tumburden")
       }
     })
+    
+    observeEvent(input$breslow, {
+      if (input$breslow>0.8){
+        updateSelectInput(session, inputId="ulceration", choices=c("No", "Yes"))
+      } else if (input$breslow<=0.8){
+        updateSelectInput(session, inputId="ulceration", choices=c("Yes"))
+      }
+    })
 
     output$recurrence_box <- shinydashboard::renderInfoBox({
       # calculate LP score
-      num.input <- string.to.num(input)
-      lp <- coef.Rec["SNstatus=Positive"]*num.input$SNstatus+
-        coef.Rec["Age.SN"]*input$age+
-        coef.Rec["Ulceration=Yes"]*num.input$ulceration+
-        coef.Rec["Loc_CAT=leg"]*num.input$location.leg+
-        coef.Rec["Loc_CAT=trunk"]*num.input$location.trunk+
-        coef.Rec["Loc_CAT=headneck"]*num.input$location.hn+
-        coef.Rec["Breslow"]*(log(input$breslow)-c.Breslow)+
-        coef.Rec["Rdamcrit"]*log(input$tumburden)+
-        coef.Rec["SNstatus=Positive * Breslow"]*(log(input$breslow)-c.Breslow)*num.input$SNstatus-center.Rec
-
+      location.text <- transform.location(input$location)
+      
+      # make prediction
+      prediction <- rms::Predict(f.mi.BS.Rec.5, 
+                            SNstatus=input$SNstatus,
+                            Age.SN=input$age,
+                            Ulceration=input$ulceration,
+                            Loc_CAT=location.text,
+                            Breslow=input$breslow,
+                            Rdamcrit=input$tumburden)
+      lp <- prediction[, "yhat"]
+      lp.lower <- prediction[, "lower"]
+      lp.upper <- prediction[, "upper"]
+      
+      # calculate score
+      score <- as.numeric((lp-int.Rec)/rc.Rec)
+      score <- ifelse(score>max.range, max.range, score)
+      
+      # revert back to lp
+      lp.trunc <- lp # as.numeric(score*rc.Rec+int.Rec)
+      
+      # shift limits
+      lp.trunc.lower <- lp.lower + (lp.trunc-lp)
+      lp.trunc.upper <- lp.upper + (lp.trunc-lp)
+      
       # calculate corresponding probability
-      h.Rec <- h0.Rec*exp(lp)
-      # p.Rec <- 1-exp(-h.Rec)
-      p.RFS <- exp(-h.Rec)
-
+      p.RFS <- exp(-h0.Rec*exp(lp.trunc))
+      p.RFS.lower <- exp(-h0.Rec*exp(lp.trunc.lower))
+      p.RFS.upper <- exp(-h0.Rec*exp(lp.trunc.upper))
+      if (p.RFS.lower>p.RFS.upper){
+        p.RFS.upper <- exp(-h0.Rec*exp(lp.trunc.lower))
+        p.RFS.lower <- exp(-h0.Rec*exp(lp.trunc.upper))
+      }
+      
       # display probability
-      shinydashboard::infoBox("Recurrence-free survival is",
-              paste0(sprintf("%.0f", p.RFS*100), "%"), icon = icon("chart-line"), color = "blue"
-      )
+      shinydashboard::infoBox("5-year recurrence-free survival is",
+              value=paste0(sprintf("%.1f", p.RFS*100), "%"),
+              subtitle=paste0("95% CI: [", sprintf("%.1f", p.RFS.lower*100),
+                     "%; ", sprintf("%.1f", p.RFS.upper*100), "%]"),
+              icon = icon("chart-line"), color = "blue")
     })
 
     output$MSM_box <- shinydashboard::renderInfoBox({
-      # # calculate LP score
-      num.input <- string.to.num(input)
-      lp <- coef.Rec["SNstatus=Positive"]*num.input$SNstatus+
-        coef.Rec["Age.SN"]*input$age+
-        coef.Rec["Ulceration=Yes"]*num.input$ulceration+
-        coef.Rec["Loc_CAT=leg"]*num.input$location.leg+
-        coef.Rec["Loc_CAT=trunk"]*num.input$location.trunk+
-        coef.Rec["Loc_CAT=headneck"]*num.input$location.hn+
-        coef.Rec["Breslow"]*(log(input$breslow)-c.Breslow)+
-        coef.Rec["Rdamcrit"]*log(input$tumburden)+
-        coef.Rec["SNstatus=Positive * Breslow"]*(log(input$breslow)-c.Breslow)*num.input$SNstatus-center.Rec
-
+      # calculate LP score
+      location.text <- transform.location(input$location)
+      
+      # make prediction
+      prediction <- rms::Predict(f.mi.BS.Rec.5, 
+                                 SNstatus=input$SNstatus,
+                                 Age.SN=input$age,
+                                 Ulceration=input$ulceration,
+                                 Loc_CAT=location.text,
+                                 Breslow=input$breslow,
+                                 Rdamcrit=input$tumburden)
+      lp <- prediction[, "yhat"]
+      lp.lower <- prediction[, "lower"]
+      lp.upper <- prediction[, "upper"]
+      
+      # calculate score
+      score <- as.numeric((lp-int.Rec)/rc.Rec)
+      score <- ifelse(score>max.range, max.range, score)
+      
+      # revert back to lp
+      lp.trunc <- lp #as.numeric(score*rc.Rec+int.Rec)
+      
+      # shift limits
+      lp.trunc.lower <- lp.lower + (lp.trunc-lp)
+      lp.trunc.upper <- lp.upper + (lp.trunc-lp)
+      
       # calculate corresponding probability
-      h.MSM <- h0.MSM*exp(MSM.cal.fact*lp)
-      # p.MSM <- 1-exp(-h.MSM)
-      p.MSS <- exp(-h.MSM)
-
+      p.MSS <- exp(-h0.Rec*exp(MSM.cal.fact*lp.trunc))
+      p.MSS.lower <- exp(-h0.Rec*exp(MSM.cal.fact*lp.trunc.lower))
+      p.MSS.upper <- exp(-h0.Rec*exp(MSM.cal.fact*lp.trunc.upper))
+      if (p.MSS.lower>p.MSS.upper){
+        p.MSS.upper <- exp(-h0.Rec*exp(MSM.cal.fact*lp.trunc.lower))
+        p.MSS.lower <- exp(-h0.Rec*exp(MSM.cal.fact*lp.trunc.upper))
+      }
+      
       # display probability
-      shinydashboard::infoBox("Melanoma-specific survival is",
-              paste0(sprintf("%.0f", p.MSS*100), "%"), icon = icon("heart"), color = "blue"
-      )
+      shinydashboard::infoBox("5-year melanoma-specific survival is",
+                              value=paste0(sprintf("%.1f", p.MSS*100), "%"),
+                              subtitle=paste0("95% CI: [", sprintf("%.1f", p.MSS.lower*100),
+                                          "%; ", sprintf("%.1f", p.MSS.upper*100), "%]"),
+                              icon = icon("chart-line"), color = "blue")
     })
 
     observeEvent(input$calculateButton, {
