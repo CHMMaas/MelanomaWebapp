@@ -4,21 +4,27 @@
 The time-to-recurrence and melanoma specific mortality was estimated using a cox proportional hazards model.
  The linear predictor of the model is given by:
  $$ \begin{align*}
-    LP &=-1.086 \\
-      &+1.076 \cdot \text{SNstatus} \\
-      &+0.008 \cdot \text{Age at SN}\\
-      &+0.468 \cdot \text{Ulceration}\\
-      &+0.259 \cdot \text{location_leg}+0.379 \cdot \text{location_trunk}+0.681 \cdot \text{location_hn}\\
-      &+0.883 \cdot (\log(\text{Breslow thickness}) - 0.715)\\
-      &+0.199 \cdot \log(\text{tumor burden}) \\
-      &-0.452 \cdot (\log(\text{Breslow thickness}) - 0.715) \cdot \text{SNstatus}
+    LP &=- 1.283 \\
+      &+1.086 \cdot \text{SNstatus} \\
+      &+0.014 \cdot \text{Age at SN}\\
+      &+0.479 \cdot \text{Ulceration}\\
+      &+0.128 \cdot \text{location_leg} + 0.253 \cdot \text{location_trunk} + 0.636 \cdot \text{location_hn}\\
+      &+0.830 \cdot (\log(\text{Breslow thickness}) - 0.718)\\
+      &+0.212 \cdot \log(\text{tumor burden}) \\
+      &-0.437 \cdot (\log(\text{Breslow thickness}) - 0.718) \cdot \text{SNstatus}
       \end{align*} $$
 where log is the natural logarithm, SNstatus is 1 if positive SN status and 0 if negative SN status; ulceration is 1 if there is ulceration; location_leg is 1 if the location is leg; location_trunk is 1 if the location is trunk, location_hn is 1 if location is head and neck.
+
+<h3>Risk score</h3>
+The risk score is calculated using
+$$ \text{Risk score} = (\text{LP}+4.493)/0.408 $$
+Subsequently, we truncate the risk score to 17 if needed to avoid overestimation, and convert back to the linear predictor using
+$$ \text{LP} = \text{Risk score} \cdot 0.408-4.493 $$
 
 <h3>Recurrence</h3>
 The probability of recurrence was calculated by
 $$ \begin{align*}
-    \text{hazard} &= 0.206 \cdot \exp(LP) \\
+    \text{hazard} &= 0.228 \cdot \exp(LP) \\
     P(\text{recurrence}) &= (1-\exp(-\text{hazard})) \cdot 100
     \end{align*} $$
 where exp the natural exponential.
@@ -26,7 +32,7 @@ where exp the natural exponential.
 <h3>Melanoma-specific mortality</h3>
 The probability of melanoma-specific mortality (MSM) was calculated by
 $$ \begin{align*}
-    \text{hazard} &= 0.089 \cdot \exp(1.14 \cdot LP) \\
+    \text{hazard} &= 0.091 \cdot \exp(1.138 \cdot LP) \\
     P(\text{MSM}) &= (1-\exp(-\text{hazard})) \cdot 100
     \end{align*} $$
 where exp the natural exponential.

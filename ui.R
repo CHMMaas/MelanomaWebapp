@@ -31,7 +31,7 @@ shiny::shinyUI(
                                   20, 80, 55),
                       shiny::selectInput("ulceration", "Ulceration",
                                   choices = c("No", "Yes")),
-                      shiny::selectInput("location", "Enter the location of the metastasis",
+                      shiny::selectInput("location", "Enter the location of the primary melanoma",
                                   choices = c("Upper limb", "Lower limb", "Trunk", "Head and neck")),
                       shiny::sliderInput("tumburden",
                                          "Enter the maximum diameter of the largest SN metastasis (in mm)",

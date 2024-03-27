@@ -33,24 +33,13 @@ shiny::shinyServer(
       lp.lower <- prediction[, "lower"]
       lp.upper <- prediction[, "upper"]
       
-      # calculate score
-      score <- as.numeric((lp-int.Rec)/rc.Rec)
-      score <- ifelse(score>max.range, max.range, score)
-      
-      # revert back to lp
-      lp.trunc <- lp # as.numeric(score*rc.Rec+int.Rec)
-      
-      # shift limits
-      lp.trunc.lower <- lp.lower + (lp.trunc-lp)
-      lp.trunc.upper <- lp.upper + (lp.trunc-lp)
-      
       # calculate corresponding probability
-      p.RFS <- exp(-h0.Rec*exp(lp.trunc))
-      p.RFS.lower <- exp(-h0.Rec*exp(lp.trunc.lower))
-      p.RFS.upper <- exp(-h0.Rec*exp(lp.trunc.upper))
+      p.RFS <- exp(-h0.Rec*exp(lp))
+      p.RFS.lower <- exp(-h0.Rec*exp(lp.lower))
+      p.RFS.upper <- exp(-h0.Rec*exp(lp.upper))
       if (p.RFS.lower>p.RFS.upper){
-        p.RFS.upper <- exp(-h0.Rec*exp(lp.trunc.lower))
-        p.RFS.lower <- exp(-h0.Rec*exp(lp.trunc.upper))
+        p.RFS.upper <- exp(-h0.Rec*exp(lp.lower))
+        p.RFS.lower <- exp(-h0.Rec*exp(lp.upper))
       }
       
       # display probability
@@ -77,24 +66,13 @@ shiny::shinyServer(
       lp.lower <- prediction[, "lower"]
       lp.upper <- prediction[, "upper"]
       
-      # calculate score
-      score <- as.numeric((lp-int.Rec)/rc.Rec)
-      score <- ifelse(score>max.range, max.range, score)
-      
-      # revert back to lp
-      lp.trunc <- lp #as.numeric(score*rc.Rec+int.Rec)
-      
-      # shift limits
-      lp.trunc.lower <- lp.lower + (lp.trunc-lp)
-      lp.trunc.upper <- lp.upper + (lp.trunc-lp)
-      
       # calculate corresponding probability
-      p.MSS <- exp(-h0.Rec*exp(MSM.cal.fact*lp.trunc))
-      p.MSS.lower <- exp(-h0.Rec*exp(MSM.cal.fact*lp.trunc.lower))
-      p.MSS.upper <- exp(-h0.Rec*exp(MSM.cal.fact*lp.trunc.upper))
+      p.MSS <- exp(-h0.MSM*exp(MSM.cal.fact*lp))
+      p.MSS.lower <- exp(-h0.MSM*exp(MSM.cal.fact*lp.lower))
+      p.MSS.upper <- exp(-h0.MSM*exp(MSM.cal.fact*lp.upper))
       if (p.MSS.lower>p.MSS.upper){
-        p.MSS.upper <- exp(-h0.Rec*exp(MSM.cal.fact*lp.trunc.lower))
-        p.MSS.lower <- exp(-h0.Rec*exp(MSM.cal.fact*lp.trunc.upper))
+        p.MSS.upper <- exp(-h0.MSM*exp(MSM.cal.fact*lp.lower))
+        p.MSS.lower <- exp(-h0.MSM*exp(MSM.cal.fact*lp.upper))
       }
       
       # display probability
